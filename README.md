@@ -1,0 +1,73 @@
+# hermes-time-sense
+
+A tiny standalone plugin that gives a Hermes agent a sense of time. No framework, no profiles of its own — it works with a plain Hermes install.
+
+## What it does
+
+On every LLM call, a `pre_llm_call` hook reads the host system clock in code and appends one line to the current user turn:
+
+```
+[time] 2026-11-05 Thu 08:15 Asia/Shanghai
+```
+
+If the previous interaction was a while ago — or on a different calendar day, e.g. you arranged work at night and resume the conversation the next morning — a second line makes the elapsed time explicit:
+
+```
+[time-gap] Last interaction was 2026-11-04 Wed 23:40, 8h35m ago. A new day has started.
+```
+
+Design points:
+
+- **Placement is the whole design.** The context slot rides the current user turn; it never touches the system prompt. The prompt prefix (SOUL, auto-loaded skills) stays byte-stable, so provider prompt-prefix caching is unaffected, and immutable history turns keep incremental history caching intact. Cost is ~20 tokens per turn.
+- **Weekday and elapsed time are computed by code**, never derived by the model (models derive weekday from date unreliably, and arithmetic on elapsed time likewise).
+- **The gap survives compression and restarts.** The previous timestamp lives in a small state file (`last_seen.json` next to the plugin), not in the conversation history that compression can summarise away.
+- **It never breaks a turn.** Every failure path returns the plain `[time]` line, or nothing.
+- The hook is passive: it fires when you send a message. It does not wake the agent up in the morning — that is a cron/scheduler's job.
+
+## Install
+
+```bash
+git clone https://github.com/hezberg/hermes-time-sense.git ~/.hermes/plugins/time-sense
+hermes plugins enable time-sense
+hermes gateway restart
+```
+
+Or clone anywhere and run `./install.sh` (respects `HERMES_HOME`, so it also works for a named profile: `HERMES_HOME=~/.hermes/profiles/<name> ./install.sh`). Enablement is per profile — install it into each profile home that should have time sense.
+
+Then add this one static line to that profile's `SOUL.md` (static text lives in the cached prefix; it costs nothing per turn):
+
+> Relative expressions like "today", "tomorrow" or "this Friday" resolve against the [time] line attached to the current turn; use the latest [time] line, not an earlier one. If a [time-gap] line is present, time has passed since the previous interaction (possibly overnight) — reinterpret "yesterday", "just now" and "last night's arrangements" accordingly instead of assuming things just happened.
+
+## Configuration
+
+Environment only, both optional:
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `HERMES_TIME_TZ` | host local timezone | IANA zone name to render in, e.g. `Asia/Shanghai`. Set it when the host's own timezone is wrong or unset (containers, VMs). |
+| `HERMES_TIME_GAP_SECONDS` | `3600` | Minimum gap that triggers the `[time-gap]` line. A calendar-day change always triggers it, however short. |
+
+The time itself comes from the host OS wall clock — the same clock `date` shows. If it is wrong, the plugin is wrong; check the host's clock/timezone before debugging the plugin.
+
+## Verify
+
+1. Ask the agent: "What time is it now? What day of the week? What date is tomorrow?" — answers should match `date "+%F %a %T %Z"` on the host.
+2. Leave the conversation for over an hour (or set `HERMES_TIME_GAP_SECONDS=0`), then send any message and ask how long since the last interaction — the `[time-gap]` line should have been attached and the answer should use it.
+3. Overnight test: arrange something in the evening, resume in the morning with just "how did it go?" — the agent should recognise it is a new day before reporting.
+
+## Uninstall
+
+```bash
+hermes plugins disable time-sense   # or remove it from plugins.enabled
+rm -rf ~/.hermes/plugins/time-sense
+```
+
+## Tests
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+## License
+
+MIT
