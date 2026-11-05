@@ -35,10 +35,10 @@ hermes gateway restart
 
 Or clone anywhere and run `./install.sh` (respects `HERMES_HOME`, so it also works for a named profile: `HERMES_HOME=~/.hermes/profiles/<name> ./install.sh`). Enablement is per profile — install it into each profile home that should have time sense.
 
-One static section belongs in that profile's `SOUL.md` (static text lives in the cached prefix; it costs nothing per turn). Either let the script do it — `./install.sh --with-soul` backs the current SOUL.md up to `SOUL.md.bak-<timestamp>` first, then appends the section or replaces an existing `## Time` section in place (idempotent) — or paste it manually; in manual mode the script never touches SOUL.md and prints the section inside a loud ACTION REQUIRED block so it is hard to miss. SOUL.md is loaded whole — no special entry marker is needed, unlike MEMORY.md/USER.md whose entries are delimited by a lone `§` line:
+One static section belongs in that profile's `SOUL.md` (static text lives in the cached prefix; it costs nothing per turn). Either let the script do it — `./install.sh --with-soul` backs the current SOUL.md up to `SOUL.md.bak-<timestamp>` first, then appends the section or replaces an existing `## Time awareness` (or legacy `## Time`) section in place (idempotent) — or paste it manually; in manual mode the script never touches SOUL.md and prints the section inside a loud ACTION REQUIRED block so it is hard to miss. SOUL.md is loaded whole — no special entry marker is needed, unlike MEMORY.md/USER.md whose entries are delimited by a lone `§` line:
 
 ```markdown
-## Time
+## Time awareness
 
 The [time] line on the current turn is the authoritative "now"; relative dates follow the latest [time] line. A [time-gap] line means the last human interaction was long ago, possibly a new day — reinterpret "yesterday" and "just now" by that gap, not as if they just happened.
 

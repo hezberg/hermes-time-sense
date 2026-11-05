@@ -1,5 +1,5 @@
 name: time-sense
-version: 0.3.0
+version: 0.3.1
 description: >-
   Give a standalone Hermes agent a sense of time: a pre_llm_call hook
   appends the current local time, computed from the host system clock,

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.1 — 2026-11-05
+
+- The SOUL section heading is renamed `## Time` → `## Time awareness`
+  (matching the name of the system-prompt section it was distilled
+  from). `install.sh --with-soul` recognises both headings: a legacy
+  `## Time` section is replaced by the new one, never duplicated.
+
 ## 0.3.0 — 2026-11-05
 
 - `install.sh --with-soul`: optionally updates SOUL.md for you. The
