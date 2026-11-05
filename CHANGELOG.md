@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.1 — 2026-11-05
+
+- The recommended SOUL.md line (README + install.sh) is shortened to
+  two sentences; semantics unchanged: relative dates resolve against
+  the latest `[time]` line, and a `[time-gap]` line means the previous
+  interaction was long ago. Repository text is English throughout
+  (earlier chat-delivered copies were in Chinese — replace the line in
+  your SOUL.md with the new one).
+
 ## 0.2.0 — 2026-11-05
 
 - **Cron (and other machine turns) no longer reset the human clock.**

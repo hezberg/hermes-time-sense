@@ -32,12 +32,9 @@ cat <<'EOF'
 
 One static line still belongs in that profile's SOUL.md (add it once):
 
-  Relative expressions like "today", "tomorrow" or "this Friday" resolve
-  against the [time] line attached to the current turn; use the latest
-  [time] line, not an earlier one. If a [time-gap] line is present, time
-  has passed since the previous interaction (possibly overnight) --
-  reinterpret "yesterday", "just now" and "last night's arrangements"
-  accordingly instead of assuming things just happened.
+  Relative dates follow the latest [time] line. A [time-gap] line means
+  the last human interaction was long ago, possibly a new day -- never
+  treat it as just now.
 
 Then restart the gateway (or start a new session) so the plugin loads:
 
