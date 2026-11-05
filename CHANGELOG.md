@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.0 — 2026-11-05
+
+- `install.sh --with-soul`: optionally updates SOUL.md for you. The
+  current SOUL.md is backed up to `SOUL.md.bak-<timestamp>` first;
+  then the `## Time` section is appended, or replaced in place if one
+  already exists — idempotent, re-running never stacks a second copy,
+  and sections after `## Time` are preserved. Without the flag the
+  script still never touches SOUL.md, but the printed manual step is
+  now a loud ACTION REQUIRED block with BEGIN/END paste markers and a
+  closing reminder, so it is hard to overlook. Verified against a
+  simulated profile home: default run leaves SOUL.md untouched,
+  `--with-soul` add / replace / re-run / no-SOUL cases all pass.
+
 ## 0.2.2 — 2026-11-05
 
 - The recommended SOUL.md text is now a compact `## Time` section
