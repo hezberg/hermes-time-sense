@@ -1,11 +1,13 @@
 name: time-sense
-version: 0.1.0
+version: 0.2.0
 description: >-
   Give a standalone Hermes agent a sense of time: a pre_llm_call hook
   appends the current local time, computed from the host system clock,
-  to every user turn, and flags long gaps (including overnight) with
-  the elapsed time. Never touches the system prompt, so prompt-prefix
-  caching is unaffected.
+  to every user turn, and flags long gaps since the last human
+  interaction (including overnight) with the elapsed time. Cron jobs,
+  subagents and kanban workers receive the time line but never reset
+  the human timestamp. Never touches the system prompt, so
+  prompt-prefix caching is unaffected.
 author: hezberg
 provides_hooks:
   - pre_llm_call

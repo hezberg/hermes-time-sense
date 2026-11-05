@@ -10,10 +10,10 @@ On every LLM call, a `pre_llm_call` hook reads the host system clock in code and
 [time] 2026-11-05 Thu 08:15 Asia/Shanghai
 ```
 
-If the previous interaction was a while ago — or on a different calendar day, e.g. you arranged work at night and resume the conversation the next morning — a second line makes the elapsed time explicit:
+If the previous human interaction was a while ago — or on a different calendar day, e.g. you arranged work at night and resume the conversation the next morning — a second line makes the elapsed time explicit:
 
 ```
-[time-gap] Last interaction was 2026-11-04 Wed 23:40, 8h35m ago. A new day has started.
+[time-gap] Last human interaction was 2026-11-04 Wed 23:40, 8h35m ago. A new day has started.
 ```
 
 Design points:
@@ -21,6 +21,7 @@ Design points:
 - **Placement is the whole design.** The context slot rides the current user turn; it never touches the system prompt. The prompt prefix (SOUL, auto-loaded skills) stays byte-stable, so provider prompt-prefix caching is unaffected, and immutable history turns keep incremental history caching intact. Cost is ~20 tokens per turn.
 - **Weekday and elapsed time are computed by code**, never derived by the model (models derive weekday from date unreliably, and arithmetic on elapsed time likewise).
 - **The gap survives compression and restarts.** The previous timestamp lives in a small state file (`last_seen.json` next to the plugin), not in the conversation history that compression can summarise away.
+- **Only human turns move the human clock.** Cron jobs, subagents and kanban workers also trigger `pre_llm_call` — on a busy gateway, a cron job every few minutes would keep resetting "last interaction" to "just now" and the overnight gap would never fire. Machine turns still receive the `[time]` line for their own work, but they never read or write the human timestamp and never get a `[time-gap]` line. Classification uses Hermes' own signals: the agent's `platform` (`cron` / `subagent`), a set `parent_session_id`, session ids starting with `cron_`, and the dispatcher's `HERMES_KANBAN_TASK` environment marker.
 - **It never breaks a turn.** Every failure path returns the plain `[time]` line, or nothing.
 - The hook is passive: it fires when you send a message. It does not wake the agent up in the morning — that is a cron/scheduler's job.
 
