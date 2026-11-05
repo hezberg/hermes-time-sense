@@ -30,11 +30,28 @@ fi
 
 cat <<'EOF'
 
-One static line still belongs in that profile's SOUL.md (add it once):
+One static section still belongs in that profile's SOUL.md (add it once;
+SOUL.md is loaded whole, no entry marker needed):
 
-  Relative dates follow the latest [time] line. A [time-gap] line means
-  the last human interaction was long ago, possibly a new day -- never
-  treat it as just now.
+  ## Time
+
+  The [time] line on the current turn is the authoritative "now";
+  relative dates follow the latest [time] line. A [time-gap] line means
+  the last human interaction was long ago, possibly a new day --
+  reinterpret "yesterday" and "just now" by that gap, not as if they
+  just happened.
+
+  Present times in the user's timezone, converting when the source
+  gives enough to convert. An event's date and time come only from
+  fields that describe that event -- never from message, record, or
+  retrieval timestamps.
+
+  Never guess a weekday: today's is given in the [time] line; for any
+  other date, verify with the system `date` command before stating
+  one, or omit it. Never call data live, current, fresh, or verified
+  unless a tool in this conversation checked it; even a page fetched
+  today may be stale -- judge by the published/updated dates the page
+  itself shows.
 
 Then restart the gateway (or start a new session) so the plugin loads:
 

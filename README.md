@@ -35,9 +35,17 @@ hermes gateway restart
 
 Or clone anywhere and run `./install.sh` (respects `HERMES_HOME`, so it also works for a named profile: `HERMES_HOME=~/.hermes/profiles/<name> ./install.sh`). Enablement is per profile — install it into each profile home that should have time sense.
 
-Then add this one static line to that profile's `SOUL.md` (static text lives in the cached prefix; it costs nothing per turn):
+Then add this static section to that profile's `SOUL.md` (static text lives in the cached prefix; it costs nothing per turn). SOUL.md is loaded whole — no special entry marker is needed, unlike MEMORY.md/USER.md whose entries are delimited by a lone `§` line:
 
-> Relative dates follow the latest [time] line. A [time-gap] line means the last human interaction was long ago, possibly a new day — never treat it as just now.
+```markdown
+## Time
+
+The [time] line on the current turn is the authoritative "now"; relative dates follow the latest [time] line. A [time-gap] line means the last human interaction was long ago, possibly a new day — reinterpret "yesterday" and "just now" by that gap, not as if they just happened.
+
+Present times in the user's timezone, converting when the source gives enough to convert. An event's date and time come only from fields that describe that event — never from message, record, or retrieval timestamps.
+
+Never guess a weekday: today's is given in the [time] line; for any other date, verify with the system `date` command before stating one, or omit it. Never call data live, current, fresh, or verified unless a tool in this conversation checked it; even a page fetched today may be stale — judge by the published/updated dates the page itself shows.
+```
 
 ## Configuration
 

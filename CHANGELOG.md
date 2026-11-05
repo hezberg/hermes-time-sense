@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.2 — 2026-11-05
+
+- The recommended SOUL.md text is now a compact `## Time` section
+  (README + install.sh), replacing the single line from 0.2.1. Besides
+  the `[time]` / `[time-gap]` rules it adds: present times in the
+  user's timezone; an event's date/time comes only from fields
+  describing that event, never from message/retrieval timestamps;
+  never guess a weekday (today's is in the `[time]` line — verify any
+  other date with the system `date` command or omit it); never call
+  data live/current/verified unless a tool checked it this
+  conversation. The section belongs in SOUL.md, which Hermes loads
+  whole — the `§` entry delimiter applies only to MEMORY.md/USER.md.
+
 ## 0.2.1 — 2026-11-05
 
 - The recommended SOUL.md line (README + install.sh) is shortened to
